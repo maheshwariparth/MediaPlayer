@@ -10,5 +10,6 @@
       <Button fx:id="playButton" layoutX="127.0" layoutY="664.0" mnemonicParsing="false" onAction="#playMedia" text="Play" />
       <Button fx:id="stopButton" layoutX="50.0" layoutY="664.0" mnemonicParsing="false" onAction="#stopMedia" text="Stop" />
       <Button fx:id="pauseButton" layoutX="203.0" layoutY="664.0" mnemonicParsing="false" onAction="#pauseMedia" text="Pause" />
+      <Button fx:id="fileChooseButton" layoutX="289.0" layoutY="664.0" mnemonicParsing="false" onAction="#fileChoose" text="Choose File" />
    </children>
 </AnchorPane>

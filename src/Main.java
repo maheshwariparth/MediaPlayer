@@ -12,12 +12,12 @@ public class Main extends Application {
     }
 
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("mediaplayer.fxml"));
         Scene scene = new Scene(root,Color.BLACK);
 
-        stage.setTitle("Media Player");
-        stage.setScene(scene);
-        stage.show();
+        primaryStage.setTitle("Media Player");
+        primaryStage.setScene(scene);
+        primaryStage.show();
     }
 }
