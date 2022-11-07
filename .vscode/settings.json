@@ -10,6 +10,14 @@
         "d:\\SystemSoftwares\\openjfx-19_windows-x64_bin-sdk\\javafx-sdk-19\\lib\\javafx.media.jar",
         "d:\\SystemSoftwares\\openjfx-19_windows-x64_bin-sdk\\javafx-sdk-19\\lib\\javafx.swing.jar",
         "d:\\SystemSoftwares\\openjfx-19_windows-x64_bin-sdk\\javafx-sdk-19\\lib\\javafx.web.jar",
-        "d:\\SystemSoftwares\\openjfx-19_windows-x64_bin-sdk\\javafx-sdk-19\\lib\\javafx-swt.jar"
+        "d:\\SystemSoftwares\\openjfx-19_windows-x64_bin-sdk\\javafx-sdk-19\\lib\\javafx-swt.jar",
+        "c:\\JAVA_fx\\javafx-sdk-19\\lib\\javafx.base.jar",
+        "c:\\JAVA_fx\\javafx-sdk-19\\lib\\javafx.controls.jar",
+        "c:\\JAVA_fx\\javafx-sdk-19\\lib\\javafx.fxml.jar",
+        "c:\\JAVA_fx\\javafx-sdk-19\\lib\\javafx.graphics.jar",
+        "c:\\JAVA_fx\\javafx-sdk-19\\lib\\javafx.media.jar",
+        "c:\\JAVA_fx\\javafx-sdk-19\\lib\\javafx.swing.jar",
+        "c:\\JAVA_fx\\javafx-sdk-19\\lib\\javafx.web.jar",
+        "c:\\JAVA_fx\\javafx-sdk-19\\lib\\javafx-swt.jar",
     ]
 }

@@ -6,6 +6,14 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch Main Ritesh",
+            "request": "launch",
+            "mainClass": "Main",
+            "projectName": "MediaPlayer_5e3677e4",
+            "vmArgs": "--module-path \"C:/JAVA_fx/javafx-sdk-19/lib\"  --add-modules javafx.controls,javafx.fxml --add-modules javafx.controls,javafx.media",
+        },
+        {
+            "type": "java",
             "name": "Launch Main",
             "request": "launch",
             "mainClass": "Main",
