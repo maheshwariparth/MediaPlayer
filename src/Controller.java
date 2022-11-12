@@ -1,5 +1,4 @@
 import java.io.File;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -9,6 +8,8 @@ import javafx.beans.Observable;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -18,23 +19,10 @@ import javafx.scene.media.MediaView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser.ExtensionFilter;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaPlayer.Status;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-
-import javafx.application.Platform;
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
+import javafx.util.Duration;
 
 public class Controller implements Initializable {
 
@@ -59,9 +47,15 @@ public class Controller implements Initializable {
     Slider volSlider = new Slider();
 
     @FXML
-    ImageView volIMG;
-    // Image vol = new Image("C:\\Songs\\mute.jpg");
-    // Image muted = new Image("C:\\Songs\\vol.jpg");
+    private ComboBox<String> speedControl;
+
+    @FXML
+    private ImageView volIMG;
+    Image vol = new Image("C:\\Songs\\vol.png");
+    Image muted = new Image("C:\\Songs\\mute.png");
+
+    @FXML
+    private Label playTime;
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
@@ -74,6 +68,10 @@ public class Controller implements Initializable {
         media = new Media(file.toURI().toString());
         mediaPlayer = new MediaPlayer(media);
         mediaView.setMediaPlayer(mediaPlayer);
+        for (int i = 25; i < 201; i += 25) {
+            speedControl.getItems().add(Integer.toString(i) + "%");
+        }
+        setPlayer();
     }
 
     public void setPlayer() {
@@ -85,6 +83,8 @@ public class Controller implements Initializable {
         mediaPlayer.setOnReady(() -> stage.sizeToScene());
         mediaView.setMediaPlayer(mediaPlayer);
         mediaPlayer.setAutoPlay(true);
+        speedControl.setValue("100%");
+
         // Time Slider
         mediaPlayer.currentTimeProperty().addListener(new InvalidationListener() {
             @Override
@@ -110,19 +110,13 @@ public class Controller implements Initializable {
                 if (volSlider.isPressed()) {
                     mediaPlayer.setVolume(volSlider.getValue() / 100);
                 }
+                if (volSlider.getValue() == 0.0) {
+                    volIMG.setImage(muted);
+                } else {
+                    volIMG.setImage(vol);
+                }
             }
         });
-
-        // volSlider.valueProperty().addListener(new InvalidationListener() {
-        //     @Override
-        //     public void invalidated(Observable arg0) {
-        //         if (volSlider.getValue() == 0) {
-        //             volIMG.setImage(muted);
-        //         } else {
-        //             volIMG.setImage(vol);
-        //         }
-        //     }
-        // });
 
         Playbtn.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -154,6 +148,7 @@ public class Controller implements Initializable {
 
     public void playMedia() {
         mediaPlayer.play();
+        // changeSpeed(null);
     }
 
     public void pauseMedia() {
@@ -162,6 +157,7 @@ public class Controller implements Initializable {
 
     public void stopMedia() {
         mediaPlayer.stop();
+        Playbtn.setText(">");
     }
 
     public void fileChoose() {
@@ -184,10 +180,59 @@ public class Controller implements Initializable {
             public void run() {
                 // Updating to the new time value
                 // This will move the slider while running your video
+                playTime.setText(formatTime(mediaPlayer.getCurrentTime(), mediaPlayer.getTotalDuration()));
                 timeSlider.setValue(mediaPlayer.getCurrentTime().toMillis() /
                         mediaPlayer.getTotalDuration().toMillis()
                         * 100);
             }
         });
+    }
+
+    public void changeSpeed(ActionEvent ae) {
+        if (speedControl.getValue() == null) {
+            mediaPlayer.setRate(1);
+        } else {
+            mediaPlayer.setRate(
+                    Integer.parseInt(speedControl.getValue().substring(0, speedControl.getValue().length() - 1))
+                            * 0.01);
+        }
+    }
+
+    private static String formatTime(Duration elapsed, Duration duration) {
+        int intElapsed = (int) Math.floor(elapsed.toSeconds());
+        int elapsedHours = intElapsed / (60 * 60);
+        if (elapsedHours > 0) {
+            intElapsed -= elapsedHours * 60 * 60;
+        }
+        int elapsedMinutes = intElapsed / 60;
+        int elapsedSeconds = intElapsed - elapsedHours * 60 * 60
+                - elapsedMinutes * 60;
+
+        if (duration.greaterThan(Duration.ZERO)) {
+            int intDuration = (int) Math.floor(duration.toSeconds());
+            int durationHours = intDuration / (60 * 60);
+            if (durationHours > 0) {
+                intDuration -= durationHours * 60 * 60;
+            }
+            int durationMinutes = intDuration / 60;
+            int durationSeconds = intDuration - durationHours * 60 * 60 - durationMinutes * 60;
+            if (durationHours > 0) {
+                return String.format("%d:%02d:%02d/%d:%02d:%02d",
+                        elapsedHours, elapsedMinutes, elapsedSeconds,
+                        durationHours, durationMinutes, durationSeconds);
+            } else {
+                return String.format("%02d:%02d/%02d:%02d",
+                        elapsedMinutes, elapsedSeconds, durationMinutes,
+                        durationSeconds);
+            }
+        } else {
+            if (elapsedHours > 0) {
+                return String.format("%d:%02d:%02d", elapsedHours,
+                        elapsedMinutes, elapsedSeconds);
+            } else {
+                return String.format("%02d:%02d", elapsedMinutes,
+                        elapsedSeconds);
+            }
+        }
     }
 }
